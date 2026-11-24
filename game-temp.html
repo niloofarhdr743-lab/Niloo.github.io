@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>شهر شیرین؛ قنادی رنگین‌کمان</title>
+<style>
+:root{
+  --pink:#FFC8DC;--pink2:#FF9DBE;--berry:#D8386B;--berry2:#F0628F;
+  --teal:#8FE3DA;--teal2:#35B5A8;--lilac:#D9C9F7;--lilac2:#8E6FD0;
+  --cream:#FFF8EA;--butter:#FFE08A;--cocoa:#6A4034;--ink:#4B2C3F;
+  --shadow:rgba(140,70,110,.28);
+  --card:min(22vw,40vh);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Vazirmatn","Vazir","IRANSansX","IRANSans","Shabnam","Noto Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  color:var(--ink);background:#FFE9F2;overflow:hidden;
+  -webkit-user-select:none;user-select:none;
+}
+button{font-family:inherit}
+:focus-visible{outline:4px solid var(--lilac2);outline-offset:3px}
+
+#app{
+  position:fixed;inset:0;display:flex;flex-direction:column;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(255,255,255,.8) 0,transparent 38%),
+    radial-gradient(rgba(255,255,255,.75) 2.2px,transparent 2.9px) 0 0/30px 30px,
+    linear-gradient(180deg,#FFE3EE 0%,#FFF1F6 48%,#DDF6F2 100%);
+}
+.awning{
+  height:30px;flex:none;position:relative;z-index:8;
+  background:repeating-linear-gradient(90deg,#FF9DBE 0 56px,#FFF6EA 56px 112px);
+  filter:drop-shadow(0 6px 5px rgba(140,70,110,.25));
+}
+.awning::after{
+  content:"";position:absolute;left:0;right:0;top:100%;height:28px;
+  background:repeating-linear-gradient(90deg,#FF9DBE 0 56px,#FFF6EA 56px 112px);
+  -webkit-mask:radial-gradient(circle at 28px 0,#000 27px,transparent 28.5px) 0 0/56px 28px repeat-x;
+  mask:radial-gradient(circle at 28px 0,#000 27px,transparent 28.5px) 0 0/56px 28px repeat-x;
+}
+.screen{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+.foot{
+  flex:none;height:30px;display:flex;align-items:center;justify-content:center;
+  background:var(--cream);border-top:3px solid var(--pink);
+  font-weight:800;font-size:14px;color:var(--ink);letter-spacing:0;
+}
+.foot b{color:var(--berry);margin-inline-start:6px}
+
+/* ---------- buttons ---------- */
+.btn{
+  font-weight:800;font-size:clamp(17px,2.7vmin,30px);color:var(--ink);border:0;border-radius:999px;
+  padding:.62em 1.6em;cursor:pointer;line-height:1.5;
+  background:linear-gradient(#B5F2EA,#7ADDD2);
+  box-shadow:0 .26em 0 #3FAFA3,0 .6em 1em rgba(53,181,168,.35);
+  transition:transform .12s,box-shadow .12s;
+}
+.btn:active{transform:translateY(.2em);box-shadow:0 .06em 0 #3FAFA3}
+.btn.primary{color:#fff;background:linear-gradient(#F57AA0,var(--berry));box-shadow:0 .26em 0 #A82A55,0 .6em 1em rgba(216,56,107,.35)}
+.btn.primary:active{box-shadow:0 .06em 0 #A82A55}
+.btn.ghost{background:#fff;box-shadow:0 .26em 0 #DCC9F2,0 .6em 1em rgba(142,111,208,.25)}
+.btn.big{font-size:clamp(22px,4vmin,40px);padding:.55em 2em}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;align-items:center;gap:10px;padding:30px 14px 4px;flex:none}
+.hbtn{
+  width:clamp(44px,7vmin,60px);height:clamp(44px,7vmin,60px);border-radius:50%;border:4px solid #fff;flex:none;
+  background:linear-gradient(#fff,#F1E6FB);color:var(--lilac2);cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 5px 0 #DCC9F2,0 10px 14px var(--shadow);transition:transform .12s;
+}
+.hbtn:active{transform:translateY(3px)}
+.hbtn svg{width:58%;height:58%}
+.ttl{flex:1;text-align:center;min-width:0}
+.ttl>div:first-child{font-weight:900;font-size:clamp(16px,3vmin,32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dots{display:flex;gap:7px;justify-content:center;margin-top:3px}
+.dots i{width:clamp(12px,2vmin,20px);height:clamp(12px,2vmin,20px);border-radius:50%;background:#fff;border:3px solid var(--pink2);transition:.3s}
+.dots i.done{background:var(--berry2);border-color:var(--berry2)}
+.dots i.cur{background:var(--butter);border-color:#F2B63A;transform:scale(1.2)}
+.hud{
+  display:flex;align-items:center;gap:6px;background:#fff;border:4px solid var(--butter);border-radius:999px;
+  padding:2px 14px 2px 10px;font-weight:900;font-size:clamp(15px,2.6vmin,28px);box-shadow:0 5px 0 #F3D170;flex:none;
+}
+.hud svg{width:clamp(20px,3.4vmin,34px);height:clamp(20px,3.4vmin,34px);fill:#FFC531;stroke:#E9A21A;stroke-width:1.4}
+.hud span.t{font-size:.7em;color:#8a5a73}
+
+/* ---------- stage ---------- */
+.stage{flex:1;min-height:0;display:grid;grid-template-columns:minmax(190px,27%) 1fr;gap:14px;padding:6px 16px 10px}
+.bakerPanel{display:flex;flex-direction:column;justify-content:flex-end;gap:10px;min-height:0}
+.bubble{
+  background:#fff;border:4px solid var(--lilac);border-radius:28px;padding:12px 16px;position:relative;
+  font-size:clamp(15px,2.35vmin,26px);line-height:1.9;font-weight:700;box-shadow:0 8px 0 #E8DCF9,0 14px 20px var(--shadow);
+  overflow:auto;max-height:52%;flex:none;
+}
+.bubble::after{
+  content:"";position:absolute;bottom:-14px;right:42px;width:22px;height:22px;background:#fff;
+  border-right:4px solid var(--lilac);border-bottom:4px solid var(--lilac);transform:rotate(45deg);border-radius:0 0 6px 0;
+}
+.bubble.pop{animation:pop .45s}
+#baker{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center}
+#baker svg{height:100%;max-height:100%;width:auto;max-width:100%}
+.board{
+  background:var(--cream);border:6px solid #fff;border-radius:36px;position:relative;overflow:hidden;
+  box-shadow:0 12px 0 -2px #F3C6D8,0 22px 36px var(--shadow);
+  padding:clamp(10px,2vmin,22px);display:flex;flex-direction:column;min-height:0;min-width:0;
+}
+.board::before{content:"";position:absolute;inset:8px;border:3px dashed var(--pink);border-radius:28px;pointer-events:none;opacity:.8}
+#q{margin:0 0 4px;text-align:center;font-size:clamp(19px,3.4vmin,42px);font-weight:900;line-height:1.5;position:relative}
+#play{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;gap:12px;position:relative}
+#play>svg.scene{flex:1;min-width:0;min-height:0;width:100%;height:100%;touch-action:none}
+#play>svg.shp{width:100%;height:100%;max-width:640px}
+#actions{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;min-height:clamp(52px,9vmin,84px);padding-top:6px;position:relative}
+#actions.col{flex-direction:column;align-items:stretch}
+#actions.col .btn{font-size:clamp(16px,2.6vmin,28px);padding:.55em 1.2em;width:min(100%,640px);margin-inline:auto;text-align:center}
+
+/* option cards */
+.opts{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(10px,2vmin,24px);width:100%}
+.opt{
+  width:clamp(110px,var(--card),380px);aspect-ratio:1/1;border-radius:32px;border:6px solid var(--pink);background:#fff;padding:6px;cursor:pointer;
+  box-shadow:0 8px 0 rgba(0,0,0,.06),0 14px 22px var(--shadow);transition:transform .15s,border-color .2s,opacity .3s;
+  display:grid;place-items:center;
+}
+.opt.wide{aspect-ratio:6/5;width:clamp(120px,min(28vw,44vh),400px)}
+.opt:nth-child(2){border-color:var(--teal)}
+.opt:nth-child(3){border-color:var(--lilac)}
+.opt:hover{transform:translateY(-4px)}
+.opt svg{width:100%;height:100%;display:block}
+.opt.good{border-color:#3CC79A;box-shadow:0 0 0 8px #BDF3DE,0 14px 22px var(--shadow);animation:pop .55s}
+.opt.bad{border-color:#FFB86B;background:#FFF3E3;opacity:.6;animation:shake .45s}
+.shp{filter:drop-shadow(0 8px 6px rgba(140,70,110,.25))}
+.ov{fill:transparent;transition:fill .2s}
+.ov.on{fill:url(#gBerry)}
+.noclick .ov{pointer-events:none}
+.paint .ov{cursor:pointer}
+.hl{display:none;pointer-events:none}
+.show .hl{display:inline}
+.pc{transition:transform .95s cubic-bezier(.3,1.2,.5,1)}
+.fade{transition:opacity .7s}
+.q{cursor:pointer}
+.q:hover{filter:brightness(1.05)}
+.nm{font-size:24px;font-weight:800;fill:#4B2C3F;text-anchor:middle}
+.pill{font-size:22px;font-weight:800;fill:#4B2C3F;text-anchor:middle}
+
+/* baker animation */
+.baker{animation:bob 3.4s ease-in-out infinite}
+.baker [class*="v-"]{display:none}
+.baker.mood-happy .v-happy,.baker.mood-cheer .v-cheer,.baker.mood-oops .v-oops{display:inline}
+.baker .wave{transform-origin:225px 250px;animation:wave 2.6s ease-in-out infinite alternate}
+.baker.mood-cheer .wave{animation:wave .6s ease-in-out infinite alternate}
+.baker .eyes{transform-origin:150px 142px;animation:blink 4.5s infinite}
+
+/* ---------- home ---------- */
+.homeWrap{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:34px 22px 8px;align-items:center}
+.homeLeft{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.6vmin,18px);min-width:0}
+.titleBox{position:relative;text-align:center;width:100%}
+.titleBox svg.arch{width:min(92%,520px);display:block;margin:0 auto -12px}
+h1.mainTitle{
+  margin:0;font-size:clamp(46px,10.5vmin,120px);font-weight:900;line-height:1.15;color:var(--berry);
+  text-shadow:0 3px 0 #fff,0 7px 0 #F7C3D6,0 16px 22px rgba(140,70,110,.35);
+}
+.ribbon{
+  display:inline-block;margin-top:6px;padding:.25em 1.6em;font-size:clamp(20px,4.4vmin,48px);font-weight:900;color:var(--ink);
+  background:linear-gradient(#C9F3EE,#8FE3DA);border-radius:14px;position:relative;box-shadow:0 6px 0 #5FC8BC,0 12px 18px var(--shadow);
+}
+.ribbon::before,.ribbon::after{content:"";position:absolute;top:12px;width:30px;height:100%;background:#7ADDD2;z-index:-1;border-radius:6px}
+.ribbon::before{right:-18px;clip-path:polygon(0 0,100% 0,60% 50%,100% 100%,0 100%)}
+.ribbon::after{left:-18px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,40% 50%)}
+.tagline{margin:6px 0 0;font-size:clamp(15px,2.6vmin,28px);font-weight:700;line-height:1.8}
+.lvRow{display:flex;gap:clamp(8px,1.8vmin,22px);flex-wrap:wrap;justify-content:center;width:100%}
+.lv{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;width:clamp(70px,13vmin,130px);color:var(--ink);font-weight:800;font-size:clamp(12px,1.9vmin,19px);line-height:1.5}
+.orb{
+  width:clamp(50px,9.5vmin,92px);height:clamp(50px,9.5vmin,92px);border-radius:50%;display:grid;place-items:center;font-size:clamp(24px,4.6vmin,46px);font-weight:900;
+  border:4px solid #fff;box-shadow:0 6px 0 rgba(0,0,0,.1),0 12px 16px var(--shadow);transition:transform .15s;color:var(--ink);
+  background:radial-gradient(circle at 35% 30%,#fff 0,var(--c1) 45%,var(--c2) 100%);
+}
+.lv:hover .orb{transform:translateY(-4px) scale(1.05)}
+.lvs{display:flex;gap:1px}
+.lvs svg{width:clamp(13px,2.2vmin,22px);height:clamp(13px,2.2vmin,22px)}
+.homeRight{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-height:0;min-width:0}
+.homeBaker{flex:1;min-height:0;width:100%;display:flex;justify-content:center;align-items:flex-end}
+.homeBaker svg{height:100%;width:auto;max-width:100%}
+.shelfSvg{width:min(100%,560px);flex:none;margin-top:-10px}
+
+/* ---------- modal & final ---------- */
+.modal{position:fixed;inset:0;z-index:40;background:rgba(75,44,63,.5);display:grid;place-items:center;padding:14px;animation:fadeIn .3s}
+.mcard{
+  width:min(94vw,640px);max-height:94vh;overflow:auto;background:var(--cream);border:8px solid #fff;border-radius:44px;padding:clamp(14px,3vmin,30px);text-align:center;
+  box-shadow:0 14px 0 -2px #F3C6D8,0 30px 60px rgba(0,0,0,.35);animation:pop .55s;
+}
+.mcard h3{margin:4px 0;font-size:clamp(34px,7vmin,64px);font-weight:900;color:var(--berry)}
+.mcard p{margin:6px 0 12px;font-size:clamp(16px,2.6vmin,26px);font-weight:700;line-height:1.9}
+.starsRow{display:flex;justify-content:center;gap:10px;margin:6px 0}
+.starsRow svg{width:clamp(56px,11vmin,96px);height:clamp(56px,11vmin,96px);animation:starIn .6s both}
+.mbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+.confetti i{position:absolute;top:-30px;animation:fall var(--d) linear forwards}
+.spark{position:fixed;width:16px;height:16px;background:#FFD34D;pointer-events:none;z-index:55;
+  clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:spark .85s ease-out forwards}
+.finalWrap{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:36px 24px 10px;align-items:center}
+.finalCake svg{width:100%;height:100%;max-height:70vh}
+.finalCake{display:flex;justify-content:center;min-height:0}
+.askCard{
+  background:var(--cream);border:8px solid #fff;border-radius:44px;padding:clamp(16px,3.4vmin,40px);text-align:center;position:relative;
+  box-shadow:0 14px 0 -2px #F3C6D8,0 26px 44px var(--shadow);
+}
+.askCard::before{content:"";position:absolute;inset:8px;border:3px dashed var(--pink);border-radius:34px;pointer-events:none}
+.askCard h2{margin:0 0 8px;font-size:clamp(20px,3.8vmin,44px);font-weight:900;line-height:1.9;position:relative}
+.askCard .sub{font-weight:700;font-size:clamp(14px,2.2vmin,22px);margin:10px 0;position:relative}
+.sumPills{display:flex;gap:10px;justify-content:center;margin:10px 0 14px;flex-wrap:wrap;position:relative}
+.floaty{animation:floaty 3.2s ease-in-out infinite}
+
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wave{from{transform:rotate(-8deg)}to{transform:rotate(14deg)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes pop{0%{transform:scale(.85)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes fadeIn{from{opacity:0}}
+@keyframes fall{to{transform:translate(var(--x),112vh) rotate(var(--r))}}
+@keyframes spark{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.2) rotate(180deg);opacity:0}}
+@keyframes starIn{from{transform:scale(0) rotate(-90deg)}70%{transform:scale(1.2) rotate(8deg)}to{transform:scale(1)}}
+@keyframes floaty{50%{transform:translateY(-14px) rotate(-3deg)}}
+
+@media (max-aspect-ratio:5/4),(max-width:760px){
+  :root{--card:min(29vw,26vh)}
+  .stage{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:8px;padding:4px 10px 8px}
+  .bakerPanel{flex-direction:row;align-items:flex-end;gap:8px}
+  #baker{flex:none;height:clamp(110px,19vh,190px);width:clamp(80px,22vw,150px)}
+  .bubble{flex:1;max-height:clamp(110px,19vh,190px);font-size:clamp(14px,2.7vw,20px);line-height:1.8;padding:9px 12px}
+  .bubble::after{bottom:16px;right:auto;left:-13px;transform:rotate(135deg)}
+  .homeWrap,.finalWrap{grid-template-columns:1fr;grid-template-rows:auto 1fr;overflow:auto;padding-top:34px}
+  .homeRight{height:34vh;min-height:200px}
+  .topbar{gap:6px;padding-inline:8px}
+  .hud .t{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<noscript>برای اجرای بازی، جاوااسکریپت مرورگر را فعال کنید.</noscript>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+  <radialGradient id="gFrost" cx="40%" cy="32%" r="80%"><stop offset="0" stop-color="#FFE9F2"/><stop offset=".55" stop-color="#FFB8D2"/><stop offset="1" stop-color="#F58DB4"/></radialGradient>
+  <radialGradient id="gCream" cx="40%" cy="32%" r="80%"><stop offset="0" stop-color="#FFFEF8"/><stop offset=".6" stop-color="#FFF0D2"/><stop offset="1" stop-color="#F6D9A4"/></radialGradient>
+  <linearGradient id="gSide" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBAB72"/><stop offset="1" stop-color="#C47843"/></linearGradient>
+  <radialGradient id="gStraw" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#FF8B9E"/><stop offset=".55" stop-color="#E5254F"/><stop offset="1" stop-color="#B00F3A"/></radialGradient>
+  <linearGradient id="gLeaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86DD92"/><stop offset="1" stop-color="#3FA25A"/></linearGradient>
+  <radialGradient id="gDough" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#F9D7A0"/><stop offset="1" stop-color="#D99A55"/></radialGradient>
+  <radialGradient id="gGlaze" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#FFDCEA"/><stop offset="1" stop-color="#FF96BF"/></radialGradient>
+  <radialGradient id="gCookie" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#F7CF8A"/><stop offset="1" stop-color="#CC8D48"/></radialGradient>
+  <linearGradient id="gSilver" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#D3DBE6"/><stop offset="1" stop-color="#9EACBF"/></linearGradient>
+  <radialGradient id="gPlate" cx="45%" cy="38%" r="75%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#EAF9F7"/><stop offset="1" stop-color="#BFE8E3"/></radialGradient>
+  <radialGradient id="gChoc" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#9A6450"/><stop offset="1" stop-color="#4A281D"/></radialGradient>
+  <radialGradient id="gSkin" cx="45%" cy="35%" r="75%"><stop offset="0" stop-color="#FFE6D2"/><stop offset="1" stop-color="#F7C2A0"/></radialGradient>
+  <radialGradient id="gBerry" cx="40%" cy="30%" r="85%"><stop offset="0" stop-color="#FF9CBC"/><stop offset="1" stop-color="#F0527F"/></radialGradient>
+  <linearGradient id="gJacket" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#EEE3FA"/></linearGradient>
+  <linearGradient id="gHat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E9DDF8"/></linearGradient>
+  <filter id="fSoft" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#8a4b6b" flood-opacity=".25"/></filter>
+</defs>
+</svg>
+
+<div id="app">
+  <div class="awning" aria-hidden="true"></div>
+
+  <div id="home" class="screen"></div>
+
+  <div id="game" class="screen" hidden>
+    <header class="topbar">
+      <button class="hbtn" id="bHome" aria-label="بازگشت به صفحه اصلی"></button>
+      <button class="hbtn" id="bRestart" aria-label="شروع مجدد مرحله"></button>
+      <div class="ttl"><div id="lvTitle"></div><div id="dots" class="dots" aria-hidden="true"></div></div>
+      <div class="hud" title="ستاره‌ها"><span id="icoStar"></span><b id="hStars">۰</b></div>
+      <div class="hud"><span class="t">امتیاز</span><b id="hScore">۰</b></div>
+      <button class="hbtn" id="bSound" aria-label="روشن یا خاموش کردن صدا"></button>
+    </header>
+    <main class="stage">
+      <section class="bakerPanel">
+        <div class="bubble" id="bubble" aria-live="polite"></div>
+        <div id="baker"></div>
+      </section>
+      <section class="board">
+        <h2 id="q"></h2>
+        <div id="play"></div>
+        <div id="actions"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="final" class="screen" hidden></div>
+
+  <div class="foot">طراح:<b>نیلوفر حیدرنژاد</b></div>
+</div>
+
+<script>
+"use strict";
+/* =====================  helpers  ===================== */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+let uid=0; const nid=p=>p+(++uid);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function rng(seed){let s=seed*9301+49297;return()=>{s=(s*9301+49297)%233280;return s/233280;};}
+const W=['','یک','دو','سه','چهار','پنج','شش','هفت','هشت'];
+
+/* =====================  icons  ===================== */
+const ICON={
+  home:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg>',
+  restart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 3v5h-5"/></svg>',
+  on:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a8 8 0 0 1 0 11"/></svg>',
+  off:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>',
+};
+const starIcon=(on=true,size)=>`<svg viewBox="0 0 24 24" ${size?`width="${size}" height="${size}"`:''}><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17l-6.1 3.6 1.4-6.8L2.2 9.1l6.9-.8z" fill="${on?'#FFC531':'#F3E6EE'}" stroke="${on?'#E9A21A':'#DCC9D6'}" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
+
+/* =====================  geometry & drawing  ===================== */
+const pol=(cx,cy,r,a)=>{const t=a*Math.PI/180;return[+(cx+r*Math.sin(t)).toFixed(2),+(cy-r*Math.cos(t)).toFixed(2)];};
+function wedge(cx,cy,ro,ri,a0,a1){
+  const [x0,y0]=pol(cx,cy,ro,a0),[x1,y1]=pol(cx,cy,ro,a1),L=(a1-a0)>180?1:0;
+  if(ri<=0)return `M${cx} ${cy}L${x0} ${y0}A${ro} ${ro} 0 ${L} 1 ${x1} ${y1}Z`;
+  const [x2,y2]=pol(cx,cy,ri,a1),[x3,y3]=pol(cx,cy,ri,a0);
+  return `M${x0} ${y0}A${ro} ${ro} 0 ${L} 1 ${x1} ${y1}L${x2} ${y2}A${ri} ${ri} 0 ${L} 0 ${x3} ${y3}Z`;
+}
+const ringPath=(cx,cy,ro,ri)=>`M${cx-ro} ${cy}a${ro} ${ro} 0 1 0 ${2*ro} 0a${ro} ${ro} 0 1 0 ${-2*ro} 0ZM${cx-ri} ${cy}a${ri} ${ri} 0 1 0 ${2*ri} 0a${ri} ${ri} 0 1 0 ${-2*ri} 0Z`;
+const seam=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#C9895A" stroke-opacity=".55" stroke-width="8" stroke-linecap="round"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`;
+
+const straw=(x,y,s=1,rot=0)=>`<g transform="translate(${x} ${y}) rotate(${rot}) scale(${s})">
+<path d="M0 22C-23 8-23-12-10-16-4-18 0-14 0-14S4-18 10-16C23-12 23 8 0 22Z" fill="url(#gStraw)"/>
+<ellipse cx="-7" cy="-5" rx="3.6" ry="6" fill="#fff" opacity=".38" transform="rotate(20 -7 -5)"/>
+<g fill="#FFE9A8"><circle cx="-7" cy="0" r="1.3"/><circle cx="2" cy="-3" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="-2" cy="7" r="1.3"/><circle cx="4" cy="11" r="1.3"/><circle cx="-8" cy="9" r="1.3"/></g>
+<path d="M-12-15-4-23 0-16 4-23 12-15 5-12 0-11-5-12Z" fill="url(#gLeaf)"/></g>`;
+
+function circleCake(cx,cy,r){
+  const th=r*.09; let s='';
+  s+=`<circle cx="${cx}" cy="${cy+th}" r="${r}" fill="url(#gSide)"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#gFrost)"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r-5}" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r*.87}" fill="none" stroke="#fff" stroke-width="${Math.max(3.5,r*.035)}" stroke-dasharray="1 ${r*.075}" stroke-linecap="round"/>`;
+  for(let i=0;i<8;i++){const a=22.5+i*45,[x,y]=pol(cx,cy,r*.62,a);s+=straw(x,y,r/200,a);}
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r*.2}" fill="#FFF8EE" stroke="#F5A9C6" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="${r*.13}" fill="#fff" stroke="#F5A9C6" stroke-width="1.5"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r*.08}" fill="url(#gStraw)"/><circle cx="${cx-r*.025}" cy="${cy-r*.03}" r="${r*.022}" fill="#fff" opacity=".8"/>`;
+  return s;
+}
+function trayCake(x,y,w,h){
+  const th=14; let s='';
+  s+=`<rect x="${x}" y="${y+th}" width="${w}" height="${h}" rx="24" fill="url(#gSide)"/>`;
+  s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="24" fill="url(#gFrost)"/>`;
+  s+=`<rect x="${x+8}" y="${y+8}" width="${w-16}" height="${h-16}" rx="18" fill="none" stroke="#fff" stroke-width="4.5" stroke-dasharray="1 12" stroke-linecap="round"/>`;
+  for(let i=0;i<6;i++)s+=straw(x+w*(i+.5)/6,y+h*.34,.62,(i%2?8:-8));
+  for(let i=0;i<5;i++)s+=straw(x+w*(i+1)/6,y+h*.72,.62,(i%2?-8:8));
+  return s;
+}
+function itemMarkup(kind,cx,cy,r){
+  const th=r*.09;
+  if(kind==='cake')return circleCake(cx,cy,r);
+  if(kind==='donut'){
+    const R=rng(7);let sp='';
+    const cols=['#35B5A8','#FFE08A','#ffffff','#8E6FD0','#F0527F'];
+    for(let i=0;i<34;i++){const a=R()*360,rr=r*(.45+R()*.4),[x,y]=pol(cx,cy,rr,a);
+      sp+=`<rect x="${x-r*.06}" y="${y-r*.02}" width="${r*.12}" height="${r*.04}" rx="${r*.02}" fill="${cols[i%5]}" transform="rotate(${R()*180} ${x} ${y})"/>`;}
+    return `<path d="${ringPath(cx,cy+th,r,r*.3)}" fill="#C98746" fill-rule="evenodd"/>
+      <path d="${ringPath(cx,cy,r,r*.3)}" fill="url(#gDough)" fill-rule="evenodd"/>
+      <path d="${ringPath(cx,cy,r*.92,r*.37)}" fill="url(#gGlaze)" fill-rule="evenodd"/>
+      <circle cx="${cx}" cy="${cy}" r="${r*.66}" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="${r*.05}" stroke-dasharray="${r*.5} ${r*.95}" stroke-linecap="round"/>${sp}`;
+  }
+  const R=rng(3);let ch='';
+  for(let i=0;i<13;i++){const a=R()*360,rr=r*.8*Math.sqrt(R()),[x,y]=pol(cx,cy,rr,a);
+    ch+=`<ellipse cx="${x}" cy="${y}" rx="${r*.1}" ry="${r*.075}" fill="${i%4===3?'#FFF3D6':'url(#gChoc)'}" transform="rotate(${R()*180} ${x} ${y})"/>`;}
+  return `<circle cx="${cx}" cy="${cy+th}" r="${r}" fill="#B9763A"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#gCookie)"/>
+    <circle cx="${cx}" cy="${cy}" r="${r*.92}" fill="none" stroke="#B9763A" stroke-opacity=".35" stroke-width="3" stroke-dasharray="3 8"/>${ch}`;
+}
+function roundItem(kind,mode,seed){
+  const cx=160,cy=152,r=128;
+  const inner=itemMarkup(kind,cx,cy,r);
+  let body;
+  if(mode==='whole')body=inner;
+  else{
+    let a0,a1,sx=0,sy=0;
+    if(mode==='missing'){const st=(seed%8)*45,span=seed%2?135:90;a0=st+span;a1=st+360;}
+    else{a0=0;a1=90;sx=-r/2;sy=r/2;}
+    const id=nid('k');
+    body=`<clipPath id="${id}"><path d="${wedge(cx,cy,r*2,0,a0,a1)}"/></clipPath><g transform="translate(${sx} ${sy})"><g clip-path="url(#${id})">${inner}</g></g>`;
+  }
+  return `<svg viewBox="0 0 320 320" aria-hidden="true"><circle cx="160" cy="160" r="152" fill="url(#gPlate)" stroke="#BFE8E3" stroke-width="4"/>${body}</svg>`;
+}
+
+/* knife */
+const knifeShape=()=>`<rect x="-9" y="0" width="18" height="32" rx="8" fill="url(#gChoc)"/><circle cx="0" cy="9" r="2.2" fill="#E8C9A8"/><circle cx="0" cy="22" r="2.2" fill="#E8C9A8"/>
+<path d="M-11 32H11V62Q11 71 0 80Q-11 71-11 62Z" fill="url(#gSilver)" stroke="#8795A8" stroke-width="1.5"/><path d="M-5 37V64" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85"/>`;
+function knifeG(orient,pos,P){
+  const tf=orient==='v'?`translate(${pos} ${P.ytop})`:`translate(${P.xedge} ${pos}) rotate(90)`;
+  return `<g id="knife" transform="${tf}" style="cursor:grab">${knifeShape()}
+  <line x1="0" y1="84" x2="0" y2="${84+P.len}" stroke="#8a4b6b" stroke-opacity=".28" stroke-width="9" stroke-linecap="round"/>
+  <line x1="0" y1="84" x2="0" y2="${84+P.len}" stroke="#fff" stroke-width="4.5" stroke-dasharray="2 12" stroke-linecap="round"/>
+  <circle cx="0" cy="40" r="26" fill="#fff" opacity=".001"/></g>`;
+}
+function attachKnife(svg,P,st){
+  const orient=P.orient;
+  const set=v=>{
+    st.pos=Math.max(P.range[0],Math.min(P.range[1],v));
+    const el=svg.querySelector('#knife');if(!el)return;
+    el.setAttribute('transform',orient==='v'?`translate(${st.pos} ${P.ytop})`:`translate(${P.xedge} ${st.pos}) rotate(90)`);
+  };
+  let down=false;
+  const val=e=>{const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());return orient==='v'?q.x:q.y;};
+  svg.addEventListener('pointerdown',e=>{if(!svg.querySelector('#knife'))return;down=true;try{svg.setPointerCapture(e.pointerId);}catch(_){}set(val(e));});
+  svg.addEventListener('pointermove',e=>{if(down)set(val(e));});
+  ['pointerup','pointercancel'].forEach(t=>svg.addEventListener(t,()=>{down=false;}));
+  svg.tabIndex=0;
+  svg.addEventListener('keydown',e=>{
+    const k=orient==='v'?{ArrowLeft:-4,ArrowRight:4}:{ArrowUp:-4,ArrowDown:4};
+    if(k[e.key]){set(st.pos+k[e.key]);e.preventDefault();}
+  });
+}
+
+/* avatars */
+function avatar(x,y,i,s=1){
+  const hair=['#5A3A2E','#2F2024','#8B5A3C','#3A2A3F'][i%4],skin=['#FFDCC2','#F5C7A5','#EFBB93','#FFD2B8'][i%4],bow=['#FF8FB1','#5FD3C7','#B79BEA','#FFD16B'][i%4];
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+  <path d="M-27 48Q-27 26 0 26Q27 26 27 48Z" fill="${bow}"/>
+  <circle cx="0" cy="-2" r="34" fill="${hair}"/><circle cx="0" cy="2" r="28" fill="${skin}"/>
+  <path d="M-28 0Q-26-28 0-29Q26-28 28 0Q14-12 0-10Q-14-12-28 0Z" fill="${hair}"/>
+  <ellipse cx="-10" cy="5" rx="3" ry="4" fill="#3B2332"/><ellipse cx="10" cy="5" rx="3" ry="4" fill="#3B2332"/>
+  <circle cx="-9" cy="3.6" r="1.1" fill="#fff"/><circle cx="11" cy="3.6" r="1.1" fill="#fff"/>
+  <circle cx="-17" cy="13" r="5" fill="#FF9DBE" opacity=".5"/><circle cx="17" cy="13" r="5" fill="#FF9DBE" opacity=".5"/>
+  <path d="M-7 15Q0 22 7 15" stroke="#8B3A4A" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <g transform="translate(22 -26)"><path d="M0 0-14-9V9ZM0 0 14-9V9Z" fill="${bow}"/><circle r="4" fill="${bow}" stroke="#fff" stroke-width="1.5"/></g></g>`;
+}
+
+/* baker (pastry chef) */
+function bakerSVG(){
+return `<svg viewBox="0 0 300 380" class="baker mood-happy" role="img" aria-label="خانم قناد">
+<ellipse cx="150" cy="364" rx="98" ry="12" fill="#8a4b6b" opacity=".18"/>
+<path d="M70 252Q44 292 62 326" stroke="#E5D2F3" stroke-width="34" stroke-linecap="round" fill="none"/>
+<path d="M70 252Q44 292 62 326" stroke="#FBF5FF" stroke-width="28" stroke-linecap="round" fill="none"/>
+<circle cx="63" cy="330" r="15" fill="url(#gSkin)"/>
+<path d="M62 362C60 272 82 220 150 214C218 220 240 272 238 362Z" fill="url(#gJacket)" stroke="#E5D2F3" stroke-width="3"/>
+<path d="M104 362L110 266Q150 248 190 266L196 362Z" fill="#FF9DBE" stroke="#F27BA3" stroke-width="3"/>
+<path d="M116 296H184" stroke="#fff" stroke-opacity=".7" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
+<rect x="128" y="318" width="44" height="34" rx="10" fill="#FFB8D2" stroke="#F27BA3" stroke-width="2.5"/>
+<g transform="translate(150 322) scale(.5)"><path d="M-18 6H18L13 36H-13Z" fill="#8FE3DA"/><path d="M-20 8Q-20-10 0-12Q20-10 20 8Q0 16-20 8Z" fill="url(#gFrost)"/><circle cx="0" cy="-14" r="6" fill="url(#gStraw)"/></g>
+<path d="M118 216L150 236L182 216L174 206L150 222L126 206Z" fill="#8FE3DA" stroke="#5FC8BC" stroke-width="2"/>
+<circle cx="150" cy="228" r="7" fill="#5FC8BC"/>
+<g class="wave">
+ <path d="M224 252Q258 236 266 186" stroke="#E5D2F3" stroke-width="34" stroke-linecap="round" fill="none"/>
+ <path d="M224 252Q258 236 266 186" stroke="#FBF5FF" stroke-width="28" stroke-linecap="round" fill="none"/>
+ <circle cx="267" cy="176" r="16" fill="url(#gSkin)"/>
+</g>
+<circle cx="94" cy="122" r="20" fill="#6B4332"/><circle cx="206" cy="122" r="20" fill="#6B4332"/>
+<circle cx="150" cy="142" r="58" fill="url(#gSkin)" stroke="#F0B592" stroke-width="2"/>
+<path d="M93 120Q96 98 150 96Q204 98 207 120Q190 104 172 114Q160 102 150 112Q140 102 128 114Q110 104 93 120Z" fill="#6B4332"/>
+<path d="M96 96C74 74 82 38 116 40C126 14 174 14 184 40C218 38 226 74 204 96Z" fill="url(#gHat)" stroke="#DCCBF0" stroke-width="3"/>
+<path d="M120 44Q116 66 122 90M150 34V90M180 44Q184 66 178 90" stroke="#DCCBF0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<rect x="94" y="86" width="112" height="20" rx="9" fill="#D9C9F7" stroke="#B79BEA" stroke-width="2.5"/>
+<circle cx="112" cy="160" r="10" fill="#FF9DBE" opacity=".55"/><circle cx="188" cy="160" r="10" fill="#FF9DBE" opacity=".55"/>
+<path d="M146 152Q150 157 154 152" stroke="#E29A7C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<g class="v-happy"><path d="M116 126Q127 119 138 126M162 126Q173 119 184 126" stroke="#6B4332" stroke-width="3.4" fill="none" stroke-linecap="round"/></g>
+<g class="v-oops"><path d="M116 130L138 121M162 121L184 130" stroke="#6B4332" stroke-width="3.4" fill="none" stroke-linecap="round"/></g>
+<g class="eyes">
+ <g class="v-happy v-oops-eyes"></g>
+ <g class="v-happy"><ellipse cx="127" cy="142" rx="6.5" ry="8.5" fill="#3B2332"/><ellipse cx="173" cy="142" rx="6.5" ry="8.5" fill="#3B2332"/><circle cx="129" cy="139" r="2.4" fill="#fff"/><circle cx="175" cy="139" r="2.4" fill="#fff"/></g>
+ <g class="v-oops"><ellipse cx="127" cy="143" rx="6.5" ry="8.5" fill="#3B2332"/><ellipse cx="173" cy="143" rx="6.5" ry="8.5" fill="#3B2332"/><circle cx="129" cy="140" r="2.4" fill="#fff"/><circle cx="175" cy="140" r="2.4" fill="#fff"/></g>
+</g>
+<g class="v-cheer"><path d="M118 144Q127 131 136 144M164 144Q173 131 182 144" stroke="#3B2332" stroke-width="4.2" fill="none" stroke-linecap="round"/></g>
+<g class="v-happy"><path d="M130 164Q150 182 170 164" stroke="#8B3A4A" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+<g class="v-cheer"><path d="M128 162Q150 198 172 162Z" fill="#8B2E48"/><path d="M138 176Q150 168 162 176Q150 186 138 176Z" fill="#FF9DBE"/></g>
+<g class="v-oops"><path d="M136 174Q150 164 164 174" stroke="#8B3A4A" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+</svg>`;
+}
+
+/* extra sweets for the home shelf */
+function cupcake(x,y,s=1){return `<g transform="translate(${x} ${y}) scale(${s})">
+<path d="M-34 -2H34L26 52Q0 60-26 52Z" fill="#8FE3DA" stroke="#5FC8BC" stroke-width="2.5"/>
+<path d="M-18 0L-14 54M-6 0V57M6 0V57M18 0L14 54" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
+<path d="M-40 0Q-44-26-16-30Q-16-52 0-54Q16-52 16-30Q44-26 40 0Q0 14-40 0Z" fill="url(#gFrost)" stroke="#F27BA3" stroke-width="2"/>
+<path d="M-22-12Q0-6 22-12M-14-26Q0-20 14-26" stroke="#fff" stroke-opacity=".7" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+<circle cx="0" cy="-58" r="10" fill="url(#gStraw)"/><circle cx="-3" cy="-61" r="2.6" fill="#fff" opacity=".8"/>
+<path d="M0-66Q6-76 14-78" stroke="#3FA25A" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;}
+function macaron(x,y,c1,c2,s=1){return `<g transform="translate(${x} ${y}) scale(${s})">
+<path d="M-38 -4Q-38-34 0-34Q38-34 38-4Z" fill="${c1}" stroke="${c2}" stroke-width="2.5"/>
+<path d="M-30-18Q-22-26-10-26" stroke="#fff" stroke-opacity=".7" stroke-width="4" fill="none" stroke-linecap="round"/>
+<rect x="-34" y="-4" width="68" height="12" rx="6" fill="#FFF8EE" stroke="#F0DDC4" stroke-width="2"/>
+<path d="M-38 8Q-38 38 0 38Q38 38 38 8Z" fill="${c1}" stroke="${c2}" stroke-width="2.5"/>
+<path d="M-36 6H36" stroke="${c2}" stroke-width="3" stroke-dasharray="4 5"/></g>`;}
+function shelfSVG(){
+  const dn=itemMarkup('donut',0,0,44);
+  return `<svg class="shelfSvg" viewBox="0 0 560 200" aria-hidden="true">
+  <rect x="10" y="164" width="540" height="20" rx="10" fill="#fff" stroke="#E8DCF9" stroke-width="3"/>
+  <rect x="26" y="182" width="508" height="9" rx="4" fill="#F3C6D8"/>
+  ${cupcake(70,106,1)}
+  <g transform="translate(180 150)">${macaron(0,0,'#D9C9F7','#B79BEA',.95)}</g>
+  <g transform="translate(180 112)">${macaron(0,0,'#8FE3DA','#5FC8BC',.8)}</g>
+  <g transform="translate(300 116)">${dn}</g>
+  <g transform="translate(450 112) scale(.5)">${circleCake(0,0,100)}</g>
+  </svg>`;
+}
+
+/* generic divided shape */
+function shape(o){
+  const frost=o.base==='frost',topFill=frost?'url(#gFrost)':'url(#gCream)',cid=nid('cp');
+  let parts=[],lines='',body='',decor='',clipShape='';
+  if(o.type==='circle'){
+    const cx=150,cy=128,r=104,th=11,cuts=[...o.cuts].sort((a,b)=>a-b),n=cuts.length;
+    for(let i=0;i<n;i++){const a0=cuts[i],a1=i<n-1?cuts[i+1]:cuts[0]+360;parts.push({d:wedge(cx,cy,r,0,a0,a1),size:a1-a0});}
+    lines=cuts.map(a=>{const[x,y]=pol(cx,cy,r,a);return seam(cx,cy,x,y);}).join('');
+    body=`<circle cx="${cx}" cy="${cy+th}" r="${r}" fill="url(#gSide)"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="${topFill}"/>`;
+    decor=frost?`<circle cx="${cx}" cy="${cy}" r="${r-10}" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="1 11" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="9" fill="url(#gStraw)" stroke="#fff" stroke-width="2.5"/>`
+      :`<circle cx="${cx}" cy="${cy}" r="${r-5}" fill="none" stroke="#E7B98A" stroke-opacity=".6" stroke-width="3"/>`;
+    clipShape=`<circle cx="${cx}" cy="${cy}" r="${r}"/>`;
+  }else{
+    const x=25,y=56,w=250,h=148,th=12,cuts=[...o.cuts].sort((a,b)=>a-b),f=[0,...cuts,1];
+    for(let i=0;i<f.length-1;i++){const x0=x+w*f[i],x1=x+w*f[i+1];parts.push({d:`M${x0} ${y}H${x1}V${y+h}H${x0}Z`,size:f[i+1]-f[i]});}
+    lines=cuts.map(c=>seam(x+w*c,y,x+w*c,y+h)).join('');
+    body=`<rect x="${x}" y="${y+th}" width="${w}" height="${h}" rx="22" fill="url(#gSide)"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="22" fill="${topFill}"/>`;
+    decor=frost?`<rect x="${x+9}" y="${y+9}" width="${w-18}" height="${h-18}" rx="15" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="1 11" stroke-linecap="round"/>`
+      :`<rect x="${x+5}" y="${y+5}" width="${w-10}" height="${h-10}" rx="18" fill="none" stroke="#E7B98A" stroke-opacity=".6" stroke-width="3"/>`;
+    clipShape=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="22"/>`;
+  }
+  const ovs=parts.map((p,i)=>`<path class="ov${o.colored&&o.colored.has(i)?' on':''}" data-i="${i}" d="${p.d}"/>`).join('');
+  let hl='';
+  if(o.hl){const sz=parts.map(p=>p.size),bi=sz.indexOf(Math.max(...sz)),si=sz.indexOf(Math.min(...sz));
+    hl=`<path class="hl" d="${parts[bi].d}" fill="#35B5A8" fill-opacity=".62"/><path class="hl" d="${parts[si].d}" fill="#FFD34D" fill-opacity=".88"/>`;}
+  return `<svg class="shp ${o.cls||''}" viewBox="0 0 300 250" role="img" aria-label="${o.label||'شکل'}"><clipPath id="${cid}">${clipShape}</clipPath>${body}<g clip-path="url(#${cid})">${ovs}${lines}${hl}</g>${decor}</svg>`;
+}
+
+/* =====================  sound  ===================== */
+let AC=null,soundOn=true;
+function actx(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC;}
+function note(f,t,d,type='sine',v=.16){
+  const c=actx();if(!c)return;const o=c.createOscillator(),g=c.createGain(),t0=c.currentTime+t;
+  o.type=type;o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(v,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);
+  o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+d+.05);
+}
+function sfx(n){
+  if(!soundOn)return;
+  switch(n){
+    case'good':[659,880,1175].forEach((f,i)=>note(f,i*.09,.28,'triangle'));break;
+    case'bad':note(330,0,.25,'sine',.11);note(262,.17,.32,'sine',.09);break;
+    case'tick':note(720,0,.07,'triangle',.08);break;
+    case'win':[523,659,784,1047,784,1047,1319].forEach((f,i)=>note(f,i*.11,.32,'triangle',.15));break;
+    case'cut':{const c=actx();if(!c)break;const o=c.createOscillator(),g=c.createGain();o.type='sawtooth';
+      o.frequency.setValueAtTime(1100,c.currentTime);o.frequency.exponentialRampToValueAtTime(180,c.currentTime+.18);
+      g.gain.setValueAtTime(.05,c.currentTime);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.2);
+      o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.22);break;}
+    case'serve':note(500,0,.1,'triangle',.1);note(760,.08,.14,'triangle',.1);break;
+  }
+}
+
+/* =====================  state & UI plumbing  ===================== */
+const S={score:0,base:0,stars:[0,0,0,0,0],lvl:-1,mis:0};
+let tries=0,locked=false,curRound=0,LV=null;
+const LEVEL_NAMES=['کیک کامل','تقسیم بین دو دوست','جشن چهار نفره','اشتباه قناد','اولین کسر'];
+const LEVEL_NOTES=[
+  'یاد گرفتی که به یک شیرینی کامل، «یک کل» می‌گوییم.',
+  'برای تقسیم عادلانه، قسمت‌ها باید مساوی باشند. به یک قسمت از دو قسمت مساوی، «نصف» می‌گوییم.',
+  'سهم هر دوست، یک قسمت از چهار قسمت مساوی کیک بود.',
+  'تقسیم عادلانه یعنی همه‌ی قسمت‌ها هم‌اندازه باشند.',
+  'حالا می‌توانی بگویی چند قسمت از چند قسمت مساوی رنگی است.'
+];
+const totalStars=()=>S.stars.reduce((a,b)=>a+b,0);
+function hud(){$('#hScore').textContent=fa(S.score);$('#hStars').textContent=fa(totalStars());}
+function showScreen(n){['home','game','final'].forEach(k=>{$('#'+k).hidden=(k!==n);});}
+function setQ(t){$('#q').textContent=t;}
+function say(t,mood='happy'){
+  const b=$('#bubble');b.textContent=t;b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');
+  const sv=$('#baker svg');if(sv)sv.setAttribute('class','baker mood-'+mood);
+}
+function play(h){$('#play').innerHTML=h;}
+function actions(list,col){
+  const a=$('#actions');a.innerHTML='';a.className=col?'col':'';
+  list.forEach(b=>{const e=document.createElement('button');e.className='btn '+(b.cls||'');e.textContent=b.label;e.onclick=()=>{sfx('tick');b.fn(e);};a.appendChild(e);});
+}
+function setDots(done,total){$('#dots').innerHTML=Array.from({length:total},(_,i)=>`<i class="${i<done?'done':i===done?'cur':''}"></i>`).join('');}
+function correct(msg){const p=tries===0?10:tries===1?5:2;S.score+=p;hud();sfx('good');say(msg,'cheer');}
+function wrong(msg){tries++;S.mis++;sfx('bad');say(msg,'oops');}
+function nextBtn(label){actions([{label:label||'ادامه',cls:'primary',fn:nextRound}]);}
+function burst(el){
+  const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  for(let i=0;i<12;i++){const s=document.createElement('i');s.className='spark';const a=Math.random()*6.28,d=50+Math.random()*70;
+    s.style.cssText=`left:${cx-8}px;top:${cy-8}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;background:${pick(['#FFD34D','#FF9DBE','#8FE3DA','#D9C9F7'])}`;
+    document.body.appendChild(s);setTimeout(()=>s.remove(),900);}
+}
+function confetti(n=60){
+  const c=document.createElement('div');c.className='confetti';const cols=['#FF9DBE','#8FE3DA','#D9C9F7','#FFE08A','#ffffff','#F0628F'];
+  for(let i=0;i<n;i++){const s=document.createElement('i');
+    s.style.cssText=`left:${Math.random()*100}%;background:${cols[i%cols.length]};--d:${2.2+Math.random()*2}s;--x:${(Math.random()-.5)*160}px;--r:${Math.random()*720}deg;animation-delay:${Math.random()*.6}s;width:${6+Math.random()*8}px;height:${12+Math.random()*10}px;border-radius:${Math.random()<.5?'50%':'3px'}`;
+    c.appendChild(s);}
+  document.body.appendChild(c);setTimeout(()=>c.remove(),5400);
+}
+const after=(fn)=>requestAnimationFrame(()=>requestAnimationFrame(fn));
+
+/* =====================  flow  ===================== */
+function startLevel(i){
+  S.lvl=i;S.mis=0;S.base=S.score;
+  $$('.modal').forEach(m=>m.remove());
+  showScreen('game');
+  $('#lvTitle').textContent=fa(i+1)+'  ·  '+LEVEL_NAMES[i];
+  $('#baker').innerHTML=bakerSVG();
+  hud();
+  LV=[level1,level2,level3,level4,level5][i]();
+  curRound=0;setDots(0,LV.total);LV.round(0);
+}
+function nextRound(){
+  curRound++;
+  if(curRound>=LV.total){setDots(LV.total,LV.total);finishLevel();}
+  else{setDots(curRound,LV.total);LV.round(curRound);}
+}
+function finishLevel(){
+  const st=S.mis===0?3:S.mis<=2?2:1;S.stars[S.lvl]=Math.max(S.stars[S.lvl],st);hud();
+  sfx('win');confetti(80);
+  const last=S.lvl===4,m=document.createElement('div');m.className='modal';
+  m.innerHTML=`<div class="mcard" role="dialog" aria-label="پایان مرحله">
+    <svg viewBox="0 0 400 130" width="62%" aria-hidden="true"><g fill="none" stroke-width="16" stroke-linecap="round"><path d="M40 120A160 160 0 0 1 360 120" stroke="#FF9DBE"/><path d="M62 120A138 138 0 0 1 338 120" stroke="#FFE08A"/><path d="M84 120A116 116 0 0 1 316 120" stroke="#8FE3DA"/><path d="M106 120A94 94 0 0 1 294 120" stroke="#D9C9F7"/></g></svg>
+    <h3>آفرین!</h3>
+    <div class="starsRow">${[1,2,3].map(n=>`<span style="animation-delay:${.25*n}s;display:inline-block;animation:starIn .6s ${.25*n}s both">${starIcon(n<=st,96).replace('<svg','<svg style="width:clamp(56px,11vmin,96px);height:clamp(56px,11vmin,96px)"')}</span>`).join('')}</div>
+    <p>${LEVEL_NOTES[S.lvl]}</p>
+    <p style="margin-top:0">امتیاز تو: <b>${fa(S.score)}</b></p>
+    <div class="mbtns"></div></div>`;
+  const row=$('.mbtns',m);
+  const mk=(t,c,f)=>{const b=document.createElement('button');b.className='btn '+c;b.textContent=t;b.onclick=()=>{sfx('tick');f();};row.appendChild(b);};
+  mk(last?'ادامه تا پایان بازی':'مرحله بعد','primary',()=>{m.remove();last?showFinal():startLevel(S.lvl+1);});
+  mk('تکرار مرحله','ghost',()=>{S.score=S.base;startLevel(S.lvl);});
+  mk('صفحه اصلی','ghost',()=>{m.remove();renderHome();});
+  document.body.appendChild(m);
+}
+
+/* =====================  LEVEL 1  =====================  */
+function level1(){
+  const R=[['cake','کیک'],['donut','دونات'],['cookie','کلوچه']];
+  return{total:3,round(i){
+    tries=0;locked=false;const[k,noun]=R[i];
+    setQ(`کدام ${noun} کامل است؟`);
+    const seed=Math.floor(Math.random()*16);
+    const opts=shuffle(['whole','missing','piece']);
+    play(`<div class="opts">${opts.map(t=>`<button class="opt" data-t="${t}" aria-label="یک ${noun}">${roundItem(k,t,seed)}</button>`).join('')}</div>`);
+    actions([]);
+    say(i===0?'سلام! من قنادِ شهر شیرینم. به ویترین نگاه کن. یک شیرینیِ «کامل» هیچ تکه‌ای کم ندارد.':`آفرین! حالا ${noun} کامل را پیدا کن.`);
+    $$('.opt').forEach(b=>b.onclick=()=>{
+      if(locked||b.disabled)return;const t=b.dataset.t;
+      if(t==='whole'){locked=true;b.classList.add('good');burst(b);
+        correct(`درست است! این ${noun} هیچ تکه‌ای کم ندارد. به یک چیز کامل می‌گوییم «یک کل».`);
+        nextBtn(i===2?'پایان مرحله':'ادامه');}
+      else{b.classList.add('bad');b.disabled=true;
+        wrong(t==='missing'?`این ${noun} یک تکه کم دارد. شیرینی کامل باید همه‌ی تکه‌هایش سر جایش باشد.`:`این فقط یک تکه از ${noun} است، نه همه‌ی آن. دنبال شیرینیِ کامل بگرد.`);}
+    });
+  }};
+}
+
+/* =====================  LEVEL 2  =====================  */
+function scene2(shape,mode,pos,eq){
+  const cx=320,cy=215;
+  const base=shape==='circle'?circleCake(cx,cy,130):trayCake(105,135,430,160);
+  let s='';
+  s+=shape==='circle'
+    ?`<circle id="pm" class="fade" cx="320" cy="215" r="146" fill="url(#gPlate)" stroke="#BFE8E3" stroke-width="4" filter="url(#fSoft)"/>`
+    :`<rect id="pm" class="fade" x="76" y="108" width="488" height="226" rx="44" fill="url(#gPlate)" stroke="#BFE8E3" stroke-width="4" filter="url(#fSoft)"/>`;
+  s+=`<circle id="p1" class="fade" cx="165" cy="215" r="124" fill="url(#gPlate)" stroke="#BFE8E3" stroke-width="4" style="opacity:0" filter="url(#fSoft)"/>
+      <circle id="p2" class="fade" cx="475" cy="215" r="124" fill="url(#gPlate)" stroke="#BFE8E3" stroke-width="4" style="opacity:0" filter="url(#fSoft)"/>`;
+  s+=avatar(165,395,0)+avatar(475,395,1)+`<text class="nm" x="165" y="470">سارا</text><text class="nm" x="475" y="470">مینا</text>`;
+  if(mode==='aim'){
+    s+=base+knifeG('v',pos,{ytop:0,len:shape==='circle'?270:250});
+  }else{
+    const cl=nid('cl'),cr=nid('cr');
+    s+=`<clipPath id="${cl}"><rect x="-200" y="-100" width="${pos+200}" height="900"/></clipPath><clipPath id="${cr}"><rect x="${pos}" y="-100" width="1200" height="900"/></clipPath>
+    <g id="pL" class="pc" style="transform:translate(0px,0px)"><g clip-path="url(#${cl})">${base}</g></g>
+    <g id="pR" class="pc" style="transform:translate(0px,0px)"><g clip-path="url(#${cr})">${base}</g></g>
+    <g id="lbl" class="fade" style="opacity:0"><rect x="105" y="62" width="120" height="40" rx="20" fill="#fff" stroke="#D9C9F7" stroke-width="3"/><text class="pill" x="165" y="90">نصف کیک</text>
+    <rect x="415" y="62" width="120" height="40" rx="20" fill="#fff" stroke="#D9C9F7" stroke-width="3"/><text class="pill" x="475" y="90">نصف کیک</text></g>`;
+  }
+  return s;
+}
+function level2(){
+  const rounds=['circle','tray'];
+  const G={circle:{half:65,range:[190,450],tol:11},tray:{half:107.5,range:[80,560],tol:13}};
+  return{total:2,round(i){
+    tries=0;locked=false;const sh=rounds[i],g=G[sh];
+    setQ(i?'این کیک مستطیلی را هم بین دو دوست تقسیم کن':'کیک را بین سارا و مینا عادلانه تقسیم کن');
+    const st={pos:320+(Math.random()<.5?-1:1)*(42+Math.random()*50)};
+    play(`<svg id="sc" class="scene" viewBox="0 0 640 485" role="img" aria-label="کیک و چاقو">${scene2(sh,'aim',st.pos)}</svg>`);
+    const svg=$('#sc');attachKnife(svg,{orient:'v',range:g.range,ytop:0},st);
+    say(i?'حالا یک کیک مستطیلی داریم. این بار هم چاقو را از جای درست ببر.':'سارا و مینا هر دو کیک دوست دارند! چاقو را بکش و جایی ببر که هر دو سهم مساوی بگیرند. بعد روی «ببُر!» بزن.');
+    actions([{label:'ببُر!',cls:'primary',fn:()=>{
+      if(locked)return;locked=true;sfx('cut');
+      const d=st.pos-320,ok=Math.abs(d)<=g.tol;
+      svg.innerHTML=scene2(sh,'split',st.pos);
+      if(ok){
+        after(()=>{const dx=155-g.half;$('#pL').style.transform=`translate(${-dx}px,0px)`;$('#pR').style.transform=`translate(${dx}px,0px)`;
+          $('#pm').style.opacity=0;$('#p1').style.opacity=1;$('#p2').style.opacity=1;$('#lbl').style.opacity=1;});
+        correct('آفرین! هر دوست یک قسمت مساوی گرفت. به هر کدام از این دو قسمت مساوی «نصف» می‌گوییم.');
+        nextBtn(i?'پایان مرحله':'ادامه');
+      }else{
+        after(()=>{$('#pL').style.transform='translate(-26px,0px)';$('#pR').style.transform='translate(26px,0px)';});
+        wrong(d<0?'ببین! قسمت چپ کوچک‌تر از قسمت راست شد. برای تقسیم عادلانه، چاقو را کمی به سمت راست ببر.':'ببین! قسمت راست کوچک‌تر از قسمت چپ شد. برای تقسیم عادلانه، چاقو را کمی به سمت چپ ببر.');
+        setTimeout(()=>{svg.innerHTML=scene2(sh,'aim',st.pos);locked=false;},2200);
+      }
+    }}]);
+  }};
+}
+
+/* =====================  LEVEL 3  =====================  */
+const L3={cx:380,cy:242,r:112,plates:[[660,140],[660,345],[100,345],[100,140]]};
+function scene3(mode,o={}){
+  const{cx,cy,r,plates}=L3;
+  let base=circleCake(cx,cy,r);
+  if(o.v)base+=seam(cx,cy-r-3,cx,cy+r+3);
+  let s=`<circle cx="${cx}" cy="${cy}" r="${r+22}" fill="url(#gPlate)" stroke="#BFE8E3" stroke-width="4" filter="url(#fSoft)"/>`;
+  plates.forEach(p=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="56" fill="url(#gPlate)" stroke="#BFE8E3" stroke-width="4" filter="url(#fSoft)"/>`;});
+  s+=avatar(660,48,0)+avatar(660,438,1)+avatar(100,438,2)+avatar(100,48,3);
+  if(mode==='aim'){
+    s+=base+(o.orient==='v'?knifeG('v',o.pos,{ytop:22,len:268}):knifeG('h',o.pos,{xedge:592,len:262}));
+  }else if(mode==='gap'){
+    const a=nid('ga'),b=nid('gb');
+    if(o.orient==='v'){
+      s+=`<clipPath id="${a}"><rect x="-200" y="-100" width="${o.pos+200}" height="900"/></clipPath><clipPath id="${b}"><rect x="${o.pos}" y="-100" width="1200" height="900"/></clipPath>`;
+    }else{
+      s+=`<clipPath id="${a}"><rect x="-200" y="-200" width="1400" height="${o.pos+200}"/></clipPath><clipPath id="${b}"><rect x="-200" y="${o.pos}" width="1400" height="900"/></clipPath>`;
+    }
+    s+=`<g id="gA" class="pc" style="transform:translate(0px,0px)"><g clip-path="url(#${a})">${base}</g></g><g id="gB" class="pc" style="transform:translate(0px,0px)"><g clip-path="url(#${b})">${base}</g></g>`;
+  }else{
+    const plain=circleCake(cx,cy,r),ang=[[0,90],[90,180],[180,270],[270,360]],sg=[[1,-1],[1,1],[-1,1],[-1,-1]];
+    ang.forEach((a,i)=>{const id=nid('qq');
+      s+=`<clipPath id="${id}"><path d="${wedge(cx,cy,r*2,0,a[0],a[1])}"/></clipPath>
+      <g class="pc q" data-i="${i}" role="button" tabindex="0" aria-label="یک قسمت از کیک" style="transform-origin:${cx}px ${cy}px;transform:translate(0px,0px)"><g clip-path="url(#${id})">${plain}</g></g>`;});
+  }
+  return s;
+}
+function level3(){
+  const st={pos:0};let served=0;
+  const{cx,cy,r,plates}=L3;
+  function aim(i){
+    tries=0;locked=false;
+    const orient=i===0?'v':'h',c=i===0?cx:cy;
+    st.pos=c+(Math.random()<.5?-1:1)*(40+Math.random()*40);
+    const range=[c-r-10,c+r+10];
+    setQ(i===0?'برش اول: کیک را از وسط، از بالا به پایین ببُر':'برش دوم: کیک را از وسط، از راست به چپ ببُر');
+    play(`<svg id="sc" class="scene" viewBox="0 0 760 480" role="img" aria-label="کیک چهار نفره">${scene3('aim',{orient,pos:st.pos,v:i===1})}</svg>`);
+    const svg=$('#sc');attachKnife(svg,orient==='v'?{orient,range,ytop:22}:{orient,range,xedge:592},st);
+    say(i===0?'چهار دوست به قنادی آمده‌اند! اول چاقو را از وسط کیک، از بالا به پایین بکش و روی «برش اول» بزن.':'عالی! حالا کیک دو نیم شد. یک برش دیگر از وسط کیک، از راست به چپ بزن تا چهار قسمت مساوی شود.');
+    actions([{label:i===0?'برش اول':'برش دوم',cls:'primary',fn:()=>{
+      if(locked)return;locked=true;sfx('cut');
+      const ok=Math.abs(st.pos-c)<=10;
+      if(ok){
+        svg.innerHTML=scene3('gap',{orient,pos:c,v:i===1});
+        after(()=>{const t=orient==='v'?['translate(-14px,0px)','translate(14px,0px)']:['translate(0px,-14px)','translate(0px,14px)'];
+          $('#gA').style.transform=t[0];$('#gB').style.transform=t[1];});
+        correct(i===0?'برش اول عالی بود! کیک دو قسمت مساوی شد.':'عالی! برش دوم هم از وسط بود.');
+        setTimeout(nextRound,1500);
+      }else{
+        svg.innerHTML=scene3('gap',{orient,pos:st.pos,v:i===1});
+        after(()=>{const t=orient==='v'?['translate(-26px,0px)','translate(26px,0px)']:['translate(0px,-26px)','translate(0px,26px)'];
+          $('#gA').style.transform=t[0];$('#gB').style.transform=t[1];});
+        const d=st.pos-c;
+        wrong(orient==='v'
+          ?(d<0?'ببین! قسمت چپ کوچک‌تر شد. چاقو را کمی به سمت راست ببر.':'ببین! قسمت راست کوچک‌تر شد. چاقو را کمی به سمت چپ ببر.')
+          :(d<0?'ببین! قسمت بالا کوچک‌تر شد. چاقو را کمی پایین‌تر ببر.':'ببین! قسمت پایین کوچک‌تر شد. چاقو را کمی بالاتر ببر.'));
+        setTimeout(()=>{svg.innerHTML=scene3('aim',{orient,pos:st.pos,v:i===1});locked=false;},2200);
+      }
+    }}]);
+  }
+  function serve(){
+    tries=0;locked=false;served=0;
+    setQ('به هر دوست یک قسمت بده');
+    play(`<svg id="sc" class="scene" viewBox="0 0 760 480" role="img" aria-label="تقسیم کیک بین چهار دوست">${scene3('q')}</svg>`);
+    actions([]);
+    say('چهار قسمت کاملاً مساوی شد! حالا روی هر تکه بزن تا به یکی از دوستان برسد.','cheer');
+    const ex=[[16,-16],[16,16],[-16,16],[-16,-16]],sg=[[1,-1],[1,1],[-1,1],[-1,-1]];
+    after(()=>$$('.q').forEach(q=>{const e=ex[+q.dataset.i];q.style.transform=`translate(${e[0]}px,${e[1]}px)`;}));
+    const go=q=>{
+      if(q.dataset.done)return;q.dataset.done=1;sfx('serve');
+      const i=+q.dataset.i,p=plates[i],s=.68,dx=p[0]-cx-s*sg[i][0]*r/2,dy=p[1]-cy-s*sg[i][1]*r/2;
+      q.style.transform=`translate(${dx}px,${dy}px) scale(${s})`;q.style.cursor='default';served++;
+      if(served===4){correct('همه سهم گرفتند و هیچ‌کس ناراحت نیست، چون تکه‌ها مساوی‌اند!');setTimeout(nextRound,1700);}
+    };
+    $$('.q').forEach(q=>{q.onclick=()=>go(q);q.onkeydown=e=>{if(e.key==='Enter'||e.key===' ')go(q);};});
+  }
+  function ask(){
+    tries=0;locked=false;
+    setQ('هر دوست چه سهمی از کیک گرفت؟');
+    play(`<svg id="sc" class="scene" viewBox="0 0 760 480" role="img" aria-label="هر دوست یک تکه دارد">${scene3('q')}</svg>`);
+    after(()=>{$$('.q').forEach(q=>{const i=+q.dataset.i,p=plates[i],s=.68,sg=[[1,-1],[1,1],[-1,1],[-1,-1]][i];
+      q.style.transition='none';q.style.transform=`translate(${p[0]-cx-s*sg[0]*r/2}px,${p[1]-cy-s*sg[1]*r/2}px) scale(${s})`;q.style.cursor='default';});});
+    say('به نظرت سهم هر دوست چه مقدار از کیک است؟ یکی از جواب‌ها را انتخاب کن.');
+    const O=[
+      {t:'یک قسمت از چهار قسمت مساوی کیک',ok:1},
+      {t:'نصف کیک',m:'«نصف» یعنی یک قسمت از دو قسمت مساوی. ولی این کیک به چهار قسمت مساوی تقسیم شد.'},
+      {t:'همه‌ی کیک',m:'همه‌ی کیک را چهار نفر با هم خوردند. هر دوست فقط یک تکه گرفت.'}
+    ];
+    actions(shuffle(O).map(o=>({label:o.t,fn:b=>{
+      if(locked)return;
+      if(o.ok){locked=true;burst(b);correct('درست است! هر دوست یک قسمت از چهار قسمت مساوی کیک را گرفت.');nextBtn('پایان مرحله');}
+      else{b.disabled=true;wrong(o.m);}
+    }})),true);
+  }
+  return{total:4,round(i){if(i<2)aim(i);else if(i===2)serve();else ask();}};
+}
+
+/* =====================  LEVEL 4  =====================  */
+function level4(){
+  const R=[
+    {type:'circle',label:'کیک گرد',opts:[{cuts:[90,270],ok:1},{cuts:[0,110]},{cuts:[40,100]}]},
+    {type:'circle',label:'کیک گرد',opts:[{cuts:[0,60,180,250]},{cuts:[45,135,225,315],ok:1},{cuts:[10,100,190,330]}]},
+    {type:'rect',label:'کیک مستطیلی',opts:[{cuts:[.2,.7]},{cuts:[.45,.55]},{cuts:[1/3,2/3],ok:1}]},
+    {type:'rect',label:'کیک مستطیلی',opts:[{cuts:[.25,.5,.75],ok:1},{cuts:[.3,.5,.9]},{cuts:[.15,.5,.65]}]},
+  ];
+  return{total:4,round(i){
+    tries=0;locked=false;const r=R[i];
+    setQ('کدام کیک را قناد عادلانه برش زده است؟');
+    const opts=shuffle(r.opts);
+    play(`<div class="opts">${opts.map((o,k)=>`<button class="opt wide" data-ok="${o.ok?1:0}" aria-label="${r.label} ${fa(k+1)}">${shape({type:r.type,cuts:o.cuts,base:'frost',hl:true,label:r.label})}</button>`).join('')}</div>`);
+    actions([]);
+    say(i===0?'ای وای! قنادِ شلوغ امروز حواسش نبود و بعضی کیک‌ها را نامرتب برش زده. کمکم می‌کنی عادلانه‌اش را پیدا کنم؟':'به اندازه‌ی تکه‌ها دقت کن. کدام کیک همه‌ی تکه‌هایش هم‌اندازه است؟');
+    $$('.opt').forEach(b=>b.onclick=()=>{
+      if(locked||b.disabled)return;
+      if(b.dataset.ok==='1'){locked=true;b.classList.add('good');burst(b);correct('آفرین! همه‌ی تکه‌ها هم‌اندازه‌اند، پس تقسیم عادلانه است.');nextBtn(i===3?'پایان مرحله':'ادامه');}
+      else{b.classList.add('bad');b.disabled=true;$('svg',b).classList.add('show');
+        wrong('ببین! تکه‌ی فیروزه‌ای از تکه‌ی زردرنگ خیلی بزرگ‌تر است. برای تقسیم عادلانه، همه‌ی قسمت‌ها باید مساوی باشند.');}
+    });
+  }};
+}
+
+/* =====================  LEVEL 5  =====================  */
+function level5(){
+  const R=[
+    {mode:'read',type:'circle',n:4,k:1},
+    {mode:'read',type:'rect',n:3,k:1},
+    {mode:'read',type:'circle',n:2,k:1},
+    {mode:'read',type:'rect',n:4,k:3},
+    {mode:'paint',type:'circle',n:6,k:2},
+    {mode:'paint',type:'rect',n:3,k:2},
+  ];
+  const phrase=(k,n)=>`${W[k]} قسمت از ${W[n]} قسمت مساوی`;
+  const cutsFor=(type,n)=>{
+    if(type==='rect')return Array.from({length:n-1},(_,i)=>(i+1)/n);
+    const step=360/n,off=pick([0,step/2]);return Array.from({length:n},(_,i)=>(off+i*step)%360);
+  };
+  const distract=(n,k)=>{
+    const m=new Map(),add=(kk,nn)=>{if(kk>=1&&kk<=nn&&nn>=2&&nn<=8&&!(kk===k&&nn===n))m.set(kk+'-'+nn,[kk,nn]);};
+    add(k+1,n);add(k-1,n);add(k,n+1);add(k,n-1);add(n-k,n);add(k+1,n+1);
+    return shuffle([...m.values()]).slice(0,2);
+  };
+  return{total:R.length,round(i){
+    tries=0;locked=false;const r=R[i],{n,k}=r;
+    const cuts=cutsFor(r.type,n);
+    if(r.mode==='read'){
+      const s0=r.type==='rect'?Math.floor(Math.random()*(n-k+1)):Math.floor(Math.random()*n);
+      const colored=new Set(Array.from({length:k},(_,j)=>(s0+j)%n));
+      setQ('چند قسمت از این کیک رنگی است؟');
+      play(shape({type:r.type,cuts,colored,base:'cream',cls:'noclick',label:'کیک با قسمت‌های رنگی'}));
+      say(i===0?'حالا به کیک‌های تقسیم‌شده نگاه کن. اول قسمت‌های مساوی را بشمار، بعد قسمت‌های رنگی را.':'اول همه‌ی قسمت‌های مساوی را بشمار، بعد ببین چند تا رنگی است.');
+      const O=[{t:phrase(k,n),ok:1},...distract(n,k).map(([kk,nn])=>({t:phrase(kk,nn),kk,nn}))];
+      actions(shuffle(O).map(o=>({label:o.t,fn:b=>{
+        if(locked)return;
+        if(o.ok){locked=true;burst(b);
+          correct(n===2?`درست است! ${phrase(k,n)} رنگی است. به آن «نصف» هم می‌گوییم.`:`درست است! از ${W[n]} قسمت مساوی، ${W[k]} قسمت رنگی شده است.`);
+          nextBtn('ادامه');}
+        else{b.disabled=true;
+          wrong(o.nn!==n?`اول همه‌ی قسمت‌های مساوی را بشمار. این شکل ${W[n]} قسمت مساوی دارد.`:`حالا فقط قسمت‌های رنگی را بشمار. ${W[k]} قسمت رنگی است.`);}
+      }})),true);
+    }else{
+      setQ(`${phrase(k,n)} این کیک را رنگ کن`);
+      play(shape({type:r.type,cuts,colored:new Set(),base:'cream',cls:'paint',label:'کیک برای رنگ کردن'}));
+      say('روی هر قسمتی که می‌خواهی بزن تا رنگی شود. دوباره بزنی، رنگش برمی‌گردد. وقتی تمام شد، «بررسی» را بزن.');
+      const on=new Set();
+      $$('.ov').forEach(p=>p.onclick=()=>{if(locked)return;const j=+p.dataset.i;sfx('tick');if(on.has(j)){on.delete(j);p.classList.remove('on');}else{on.add(j);p.classList.add('on');}});
+      actions([{label:'بررسی',cls:'primary',fn:b=>{
+        if(locked)return;
+        if(on.size===k){locked=true;correct(`آفرین! ${phrase(k,n)} را رنگ کردی.`);burst($('#play'));nextBtn(i===R.length-1?'پایان مرحله':'ادامه');}
+        else wrong(on.size>k?`${W[on.size]} قسمت را رنگ کرده‌ای، ولی باید ${W[k]} قسمت باشد. یکی از رنگ‌ها را بردار.`:(on.size===0?'هنوز قسمتی را رنگ نکرده‌ای. روی یکی از قسمت‌ها بزن.':`فقط ${W[on.size]} قسمت را رنگ کرده‌ای. باید ${W[k]} قسمت رنگ شود.`));
+      }}]);
+    }
+  }};
+}
+
+/* =====================  HOME  =====================  */
+function renderHome(){
+  showScreen('home');
+  const cols=[['#FFE3EE','#FF9DBE'],['#D8F8F4','#5FD3C7'],['#EFE6FD','#B79BEA'],['#FFF1C7','#FFD16B'],['#FFE3EE','#F0628F']];
+  $('#home').innerHTML=`<div class="homeWrap">
+    <div class="homeLeft">
+      <div class="titleBox">
+        <svg class="arch" viewBox="0 0 600 190" aria-hidden="true"><g fill="none" stroke-width="22" stroke-linecap="round">
+          <path d="M60 180A240 240 0 0 1 540 180" stroke="#FF9DBE"/><path d="M86 180A214 214 0 0 1 514 180" stroke="#FFE08A"/><path d="M112 180A188 188 0 0 1 488 180" stroke="#8FE3DA"/><path d="M138 180A162 162 0 0 1 462 180" stroke="#D9C9F7"/></g>
+          <g fill="#fff"><ellipse cx="62" cy="178" rx="52" ry="22"/><ellipse cx="96" cy="170" rx="38" ry="22"/><ellipse cx="538" cy="178" rx="52" ry="22"/><ellipse cx="504" cy="170" rx="38" ry="22"/></g></svg>
+        <h1 class="mainTitle">شهر شیرین</h1>
+        <div class="ribbon">قنادی رنگین‌کمان</div>
+        <p class="tagline">بیا با هم کیک‌ها را عادلانه تقسیم کنیم!</p>
+      </div>
+      <button class="btn primary big" id="bStart">شروع بازی</button>
+      <div class="lvRow">${LEVEL_NAMES.map((n,i)=>`<button class="lv" data-i="${i}" aria-label="مرحله ${fa(i+1)}: ${n}">
+        <span class="orb" style="--c1:${cols[i][0]};--c2:${cols[i][1]}">${fa(i+1)}</span><span>${n}</span>
+        <span class="lvs">${[1,2,3].map(k=>starIcon(k<=S.stars[i])).join('')}</span></button>`).join('')}</div>
+    </div>
+    <div class="homeRight"><div class="homeBaker">${bakerSVG()}</div>${shelfSVG()}</div>
+  </div>`;
+  $('#bStart').onclick=()=>{actx();sfx('good');startLevel(0);};
+  $$('.lv').forEach(b=>b.onclick=()=>{actx();sfx('tick');S.score=S.base=Math.min(S.score,S.score);startLevel(+b.dataset.i);});
+  const hb=$('#home .baker');if(hb)hb.setAttribute('class','baker mood-cheer');
+}
+
+/* =====================  FINAL  =====================  */
+function showFinal(){
+  showScreen('final');
+  const cx=200,cy=200,r=150,base=circleCake(cx,cy,r)+[0,1,2,3,4,5].map(i=>{const[x,y]=pol(cx,cy,r,i*60);return seam(cx,cy,x,y);}).join('');
+  const k1=nid('f'),k2=nid('f');
+  const cake=`<svg viewBox="0 0 460 420" role="img" aria-label="کیکی که یک قسمت آن برداشته شده است">
+    <circle cx="200" cy="205" r="178" fill="url(#gPlate)" stroke="#BFE8E3" stroke-width="4" filter="url(#fSoft)"/>
+    <clipPath id="${k1}"><path d="${wedge(cx,cy,r*2,0,60,360)}"/></clipPath><clipPath id="${k2}"><path d="${wedge(cx,cy,r*2,0,0,60)}"/></clipPath>
+    <g clip-path="url(#${k1})">${base}</g>
+    <g class="floaty"><g transform="translate(70 -34)"><g clip-path="url(#${k2})">${base}</g></g></g></svg>`;
+  $('#final').innerHTML=`<div class="finalWrap">
+    <div class="finalCake">${cake}</div>
+    <div class="askCard">
+      <h2>اگر یک کیک را به قسمت‌های مساوی تقسیم کنیم و فقط یکی از قسمت‌ها را برداریم، چه مقداری از کیک را برداشته‌ایم؟</h2>
+      <div class="sub">با هم فکر کنیم و جواب را به معلم بگوییم!</div>
+      <div class="sumPills"><div class="hud">${starIcon(true)}<b>${fa(totalStars())}</b><span class="t">از ${fa(15)} ستاره</span></div><div class="hud"><span class="t">امتیاز</span><b>${fa(S.score)}</b></div></div>
+      <div class="mbtns"><button class="btn primary" id="fAgain">بازی دوباره</button><button class="btn ghost" id="fHome">صفحه اصلی</button></div>
+    </div></div>`;
+  sfx('win');confetti(70);
+  $('#fAgain').onclick=()=>{S.score=0;S.base=0;S.stars=[0,0,0,0,0];startLevel(0);};
+  $('#fHome').onclick=renderHome;
+}
+
+/* =====================  init  =====================  */
+function init(){
+  $('#bHome').innerHTML=ICON.home;$('#bRestart').innerHTML=ICON.restart;$('#bSound').innerHTML=ICON.on;$('#icoStar').innerHTML=starIcon(true);
+  $('#bHome').onclick=()=>{sfx('tick');renderHome();};
+  $('#bRestart').onclick=()=>{sfx('tick');S.score=S.base;startLevel(S.lvl);};
+  $('#bSound').onclick=()=>{soundOn=!soundOn;$('#bSound').innerHTML=soundOn?ICON.on:ICON.off;if(soundOn)sfx('tick');};
+  renderHome();
+}
+init();
+</script>
+</body>
+</html>
